@@ -21,7 +21,11 @@
           <th scope="row">{{$no}}</th>
           <td>{{$employe->first_name}}</td>
           <td>{{$employe->last_name}}</td>
-          <td>{{$employe->company_name}}</td>
+          <td>
+             @if(!is_null($employe->CompanyNAme))
+            {{$employe->CompanyNAme->name}}
+            @else
+            @endif
           <td>{{$employe->email}}</td>
           <td>{{$employe->mobile_number}}</td>
           <td>

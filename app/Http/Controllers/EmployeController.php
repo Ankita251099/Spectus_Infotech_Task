@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Employe;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 class EmployeController extends Controller
 {
@@ -39,14 +41,23 @@ class EmployeController extends Controller
      */
     public function store(Request $request)
     {
-     $add = new Employe;
-     $add->first_name = $request->first_name;
-     $add->last_name = $request->last_name;
-     $add->email = $request->email;
-     $add->company_id = $request->company_id;
-     $add->mobile_number = $request->mobile_number;
-     $add->save();
-     return redirect()->route('employe')->with('success','Employe Created successfully');
+        $request->validate([
+            'first_name'=> 'required' ,
+            'last_name'=> 'required' ,
+            'email'=>'required',
+            'company_id'=>'required',
+            'mobile_number'=>'required|max:10'
+
+
+        ]);
+        $add = new Employe;
+        $add->first_name = $request->first_name;
+        $add->last_name = $request->last_name;
+        $add->email = $request->email;
+        $add->company_id = $request->company_id;
+        $add->mobile_number = $request->mobile_number;
+        $add->save();
+        return redirect()->route('employe')->with('success','Employe Created successfully');
 
     }
 
@@ -83,15 +94,24 @@ class EmployeController extends Controller
      */
     public function update(Request $request, Employe $employe, $id)
     {
-     $add = Employe::find($id);
-     $add->first_name = $request->first_name;
-     $add->last_name = $request->last_name;
-     $add->email = $request->email;
-     $add->company_id = $request->company_id;
-     $add->mobile_number = $request->mobile_number;
-     $add->save();
-     return redirect()->route('employe')->with('success','Employe updated successfully');
-    }
+       $request->validate([
+        'first_name'=> 'required' ,
+        'last_name'=> 'required' ,
+        'email'=>'required',
+        'company_id'=>'required',
+        'mobile_number'=>'required|max:10'
+
+
+    ]);
+       $add = Employe::find($id);
+       $add->first_name = $request->first_name;
+       $add->last_name = $request->last_name;
+       $add->email = $request->email;
+       $add->company_id = $request->company_id;
+       $add->mobile_number = $request->mobile_number;
+       $add->save();
+       return redirect()->route('employe')->with('success','Employe updated successfully');
+   }
 
     /**
      * Remove the specified resource from storage.
@@ -101,7 +121,6 @@ class EmployeController extends Controller
      */
     public function destroy(Employe $employe ,$id)
     {
-        // dd('sdds');
         $employes = Employe::find($id);
         $employes->delete();
         return redirect()->route('employe')->with('success','Employe deleted successfully');
@@ -109,22 +128,20 @@ class EmployeController extends Controller
 
     public function searchcompany(request $request)
     {
-        // dd($request->all());
-         if($request->data == null)
-        {
-                 $employes= Employe::all();
-        }
-        else
-        {
-            $employes= Employe::where('company_id',$request->data)->get();
-            
-        }
+       $employes= Employe::where('company_id',$request->data)->first();
+       if($employes != null)
+       {
+           $employes= Employe::all();
+       }
+       else
+       {
+        $employes= Employe::where('company_id',$request->data)->get();
+        
+    }
 
     $allData = view('employe.employetable', compact('employes'))->render();
-    // dd($allData);
     $data=['data' => $allData];
-    //dd($data);
     return Response()->json($data);
 
-    }
+}
 }

@@ -16,7 +16,7 @@
 	<div class="row pb-2">
     <div class="col-md-6">
       
-     <select class="form-control" id="company_name"  >
+     <select class="form-control company_name" name="company_id"  >
                 <option value="">~Select User~</option>
                     @foreach ($companys as $company)
               <option value="{{$company->id}}">{{$company->name}}</option>
@@ -36,14 +36,12 @@
                     </div>
 </div>
 </div>
-<input type="hidden" name="company_name" id="company_name" >
+<input type="hidden" name="company_id" id="company_name" >
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    // alert('sds');
  $('.this_destroy').on('click', function() {
-            alert('sdasd');
             let del_url = $(this).attr('data-url');
 
             bootbox.confirm({
@@ -66,20 +64,17 @@
             });
         })
   });
+$( ".company_name" ).change(function() {
 
-   $('.company_name').on('change',function()
-{
    var data = $(this).val();
-    alert(data);
+   
     $("#company_name").val(data);
 
 });
 
  $('.filter').on('click', function() {
-  alert('sdsa');
 
-  var data = $("#status_value").val();
-
+  var data = $("#company_name").val();
         $.ajax({
             type: "GET",
             url: "{{ route('searchcompany') }}",

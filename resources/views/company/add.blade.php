@@ -111,7 +111,6 @@
     $(document).ready(function() {
         $('select[name="country_id"]').on('change', function() {
         var countryID = $(this).val();
-        	// alert(stateID);
             if(countryID) {
                 $.ajax({
                     url: "{{url('getstate')}}?countryID="+countryID,
